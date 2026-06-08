@@ -11,5 +11,4 @@ FROM qdrant/qdrant:latest
 
 EXPOSE 6333 6334
 
-# Persist data on a mounted volume.
-VOLUME ["/qdrant/storage"]
+# Persist data on a mounted volume (use Railway Volumes on Railway).
