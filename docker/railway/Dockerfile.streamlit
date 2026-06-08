@@ -1,0 +1,29 @@
+# Streamlit chat UI — RAILWAY deployment.
+#
+# Deploy as a SEPARATE Railway service from the API. Build context = project root:
+#   docker build -f docker/railway/Dockerfile.streamlit -t rag-streamlit .
+#
+# Required env vars on Railway (Service → Variables):
+#   RAG_API_URL=http://${{rag-api.RAILWAY_PRIVATE_DOMAIN}}:8000
+#   (use the API service's public domain instead if the UI is browser-facing
+#    and you prefer calling the public API)
+
+FROM python:3.11-slim
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PYTHONUNBUFFERED=1 \
+    PORT=8501
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev
+
+COPY streamlit_app.py ./
+COPY .streamlit ./.streamlit
+
+EXPOSE 8501
+CMD ["sh", "-c", "uv run --no-dev streamlit run streamlit_app.py --server.port ${PORT} --server.address 0.0.0.0 --server.headless true"]

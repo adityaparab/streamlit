@@ -1,0 +1,33 @@
+# FastAPI RAG service — RAILWAY deployment.
+#
+# Railway builds this image, injects $PORT, and the app binds to it.
+# Build context must be the project root:
+#   docker build -f docker/railway/Dockerfile.api -t rag-api .
+#
+# Required env vars on Railway (Service → Variables):
+#   QDRANT_HOST=http://${{Qdrant.RAILWAY_PRIVATE_DOMAIN}}:6333
+#   OLLAMA_HOST, OLLAMA_EMBEDDING_MODEL, OLLAMA_GENERATION_MODEL, QDRANT_COLLECTION
+#   (optional) LANGCHAIN_TRACING_V2, LANGCHAIN_API_KEY, LANGCHAIN_PROJECT
+
+FROM python:3.11-slim
+
+# uv for fast, reproducible installs from uv.lock.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000
+
+WORKDIR /app
+
+# Install dependencies first (cached layer) from the lockfile.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev
+
+# Then copy the application source.
+COPY app ./app
+
+# Bind to Railway's injected $PORT (defaults to 8000 locally).
+EXPOSE 8000
+CMD ["sh", "-c", "uv run --no-dev uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]

@@ -1,0 +1,31 @@
+# Secrets — never bake into an image
+.env
+.env.*
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Project artifacts
+outputs/
+qdrant_storage/
+files/
+
+# Version control & tooling
+.git/
+.gitignore
+.dockerignore
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Docs / meta
+README.md
+*.md

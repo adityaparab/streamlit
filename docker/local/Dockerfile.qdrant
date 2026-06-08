@@ -1,0 +1,15 @@
+# Locally hosted Qdrant vector database (LOCAL deployment only).
+# For Railway, deploy Qdrant from the qdrant/qdrant image directly — see
+# docker/railway/README.md. This file is normally used via docker-compose.yml.
+#
+# Build:  docker build -f docker/local/Dockerfile.qdrant -t rag-qdrant .
+# Run:    docker run -p 6333:6333 -p 6334:6334 \
+#             -v "$(pwd)/qdrant_storage:/qdrant/storage" rag-qdrant
+#
+# REST API -> http://localhost:6333   gRPC -> localhost:6334
+FROM qdrant/qdrant:latest
+
+EXPOSE 6333 6334
+
+# Persist data on a mounted volume.
+VOLUME ["/qdrant/storage"]
