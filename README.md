@@ -39,9 +39,10 @@ ingest.py / extract.py / llm-judge.py   # original CLI scripts (still usable)
 Add to `.env` to capture LangChain traces:
 
 ```
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_API_KEY=<your LangSmith key>
-LANGCHAIN_PROJECT=rag-tut
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+LANGSMITH_API_KEY=<your LangSmith key>
+LANGSMITH_PROJECT=rag-tut
 ```
 
 Startup logs whether tracing is active.

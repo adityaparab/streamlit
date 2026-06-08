@@ -34,9 +34,10 @@ OLLAMA_HOST=https://<your-ollama-endpoint>
 OLLAMA_EMBEDDING_MODEL=embeddinggemma:latest
 OLLAMA_GENERATION_MODEL=gemma4:31b-cloud
 # optional observability
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_API_KEY=<langsmith key>
-LANGCHAIN_PROJECT=rag-tut
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+LANGSMITH_API_KEY=<langsmith key>
+LANGSMITH_PROJECT=rag-tut
 ```
 `PORT` is injected by Railway — the container binds to it automatically.
 
